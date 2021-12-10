@@ -39,6 +39,10 @@ class App extends Component {
             page: prevState.page + 1,
             searchbar: searchbar,
           }));
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth",
+          });
         }
       })
       .catch((error) => this.setState({ error, status: "rejected" }));
@@ -58,10 +62,11 @@ class App extends Component {
     this.setState({ largeImageURL: "", alt: "" });
   };
   onFormSubmit = (searchName) => {
-    if (searchName) {
-      this.setState({ searchbar: searchName });
-    }
-    return;
+    // if (searchName) {
+    //   this.setState({ searchbar: searchName });
+    // }
+    // return;
+    this.setState({ searchbar: searchName, page: 1, result: [], error: null });
   };
 
   render() {
