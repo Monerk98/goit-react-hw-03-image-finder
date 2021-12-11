@@ -36,5 +36,5 @@ export default Modal;
 
 Modal.propTypes = {
   largeImageURL: PropTypes.string.isRequired,
-  tags: PropTypes.string,
+  tags: PropTypes.string.isRequired,
 };
