@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-import Loader from "react-loader-spinner";
+// import Loader from "react-loader-spinner";
+import Spinner from "./Loader/Loader";
 import imageApi from "./services/api";
 import SearchBar from "./SearchBar/SearchBar.jsx";
 import ImageGallery from "./ImageGallery/ImageGallery.jsx";
@@ -72,13 +73,7 @@ class App extends Component {
         <SearchBar submit={this.onFormSubmit} />
         {status === "pending" && (
           <div>
-            <Loader
-              type="ThreeDots"
-              color="#00BFFF"
-              height={90}
-              width={90}
-              timeout={2500} //3 secs
-            />
+            <Spinner />
           </div>
         )}
         {status === "resolved" && (
