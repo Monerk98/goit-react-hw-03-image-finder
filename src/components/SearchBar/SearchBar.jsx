@@ -5,7 +5,7 @@ import { ReactComponent as SearchIcon } from "../icons/search.svg";
 
 class SearchBar extends Component {
   static propTypes = {
-    onSubmit: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func,
   };
   state = {
     searchbar: "",
