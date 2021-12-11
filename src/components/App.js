@@ -39,10 +39,6 @@ class App extends Component {
             page: prevState.page + 1,
             searchbar: searchbar,
           }));
-          window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: "smooth",
-          });
         }
       })
       .catch((error) => this.setState({ error, status: "rejected" }));
