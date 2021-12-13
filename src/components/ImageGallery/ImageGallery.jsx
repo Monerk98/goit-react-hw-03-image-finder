@@ -5,12 +5,12 @@ import s from "./ImageGallery.module.css";
 export default function ImageGallery({ modalOpen, result }) {
   return (
     <ul className={s.ImageGallery}>
-      {result.map((image) => (
+      {result.map(({ id, tags, webformatURL, largeImageURL }) => (
         <ImageGalleryItem
-          key={image.id}
-          tags={image.tags}
-          webformatURL={image.webformatURL}
-          largeImageURL={image.largeImageURL}
+          key={id}
+          alt={tags}
+          src={webformatURL}
+          url={largeImageURL}
           modalOpen={modalOpen}
         />
       ))}

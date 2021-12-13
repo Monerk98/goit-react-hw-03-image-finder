@@ -1,23 +1,23 @@
 import PropTypes from "prop-types";
 import s from "./ImageGalleryItem.module.css";
 
-const ImageGalleryItem = ({ webformatURL, largeImageURL, tags, modalOpen }) => {
+const ImageGalleryItem = ({ alt, src, url, modalOpen }) => {
   return (
     <li
       className={s.ImageGalleryItem}
       onClick={() => {
-        modalOpen(largeImageURL, tags);
+        modalOpen(url, alt);
       }}
     >
-      <img src={webformatURL} alt={tags} className={s.ImageGalleryItemImage} />
+      <img src={src} alt={alt} className={s.ImageGalleryItemImage} />
     </li>
   );
 };
 export default ImageGalleryItem;
 
 ImageGalleryItem.propTypes = {
-  webformatURL: PropTypes.string.isRequired,
-  largeImageURL: PropTypes.string.isRequired,
+  src: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
   modalOpen: PropTypes.func.isRequired,
-  tags: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
 };

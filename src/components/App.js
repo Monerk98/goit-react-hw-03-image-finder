@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-// import Loader from "react-loader-spinner";
 import Spinner from "./Loader/Loader";
 import imageApi from "./services/api";
 import SearchBar from "./SearchBar/SearchBar.jsx";
@@ -15,7 +14,7 @@ class App extends Component {
     status: "idle",
     result: [],
     isLoading: false,
-    page: null,
+    page: 1,
     error: null,
   };
   componentDidUpdate(prevProps, prevState) {
@@ -27,6 +26,7 @@ class App extends Component {
       this.fetchImageApi();
     }
   }
+
   fetchImageApi = () => {
     const { searchbar, page } = this.state;
     imageApi(searchbar, page)
@@ -40,12 +40,23 @@ class App extends Component {
             page: prevState.page + 1,
             searchbar: searchbar,
           }));
+          window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: "smooth",
+          });
         }
       })
       .catch((error) => this.setState({ error, status: "rejected" }));
   };
 
   loadMore = () => {
+    this.setState({
+      status: "pending",
+    });
+    // this.setState((prevState) => ({
+    //   page: prevState.page + 1,
+    // }));
+
     this.fetchImageApi();
   };
 
@@ -59,35 +70,27 @@ class App extends Component {
     this.setState({ largeImageURL: "", alt: "" });
   };
   onFormSubmit = (searchName) => {
-    // if (searchName) {
-    //   this.setState({ searchbar: searchName });
-    // }
-    // return;
     this.setState({ searchbar: searchName, page: 1, result: [], error: null });
   };
-
   render() {
     const { result, status, error, alt, largeImageURL } = this.state;
     return (
       <div>
         <SearchBar submit={this.onFormSubmit} />
-        {status === "pending" && (
-          <div>
-            <Spinner />
-          </div>
-        )}
+        {status === "pending" && <Spinner />}
+
         {status === "resolved" && (
           <>
             <ImageGallery modalOpen={this.modalOpen} result={result} />
             <Button onClick={this.loadMore} />
-            {largeImageURL && (
-              <Modal
-                largeImageURL={largeImageURL}
-                alt={alt}
-                onClick={this.modalClose}
-              />
-            )}
           </>
+        )}
+        {largeImageURL && (
+          <Modal
+            largeImageURL={largeImageURL}
+            alt={alt}
+            onClick={this.modalClose}
+          />
         )}
 
         {status === "rejected" && <p>{error}</p>}
