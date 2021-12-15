@@ -85,28 +85,38 @@ class App extends Component {
   };
   render() {
     const { result, status, error, alt, largeImageURL } = this.state;
-    return (
-      <div>
-        <SearchBar submit={this.onFormSubmit} />
-        {status === "pending" && <Spinner />}
+    if (status === "idle") {
+      return <SearchBar submit={this.onFormSubmit} />;
+    }
+    if (status === "pending") {
+      return (
+        <div>
+          <SearchBar submit={this.onFormSubmit} />
+          {result.length > 0 && <ImageGallery result={result} />}
+          <Spinner />
+        </div>
+      );
+    }
+    if (status === "rejected") {
+      return <p>{error}</p>;
+    }
+    if (status === "resolved") {
+      return (
+        <>
+          <SearchBar submit={this.onFormSubmit} />
+          <ImageGallery modalOpen={this.modalOpen} result={result} />
+          <Button onClick={this.loadMore} />
 
-        {status === "resolved" && (
-          <>
-            <ImageGallery modalOpen={this.modalOpen} result={result} />
-            <Button onClick={this.loadMore} />
-          </>
-        )}
-        {largeImageURL && (
-          <Modal
-            largeImageURL={largeImageURL}
-            alt={alt}
-            onClick={this.modalClose}
-          />
-        )}
-
-        {status === "rejected" && <p>{error}</p>}
-      </div>
-    );
+          {largeImageURL && (
+            <Modal
+              largeImageURL={largeImageURL}
+              alt={alt}
+              onClick={this.modalClose}
+            />
+          )}
+        </>
+      );
+    }
   }
 }
 export default App;

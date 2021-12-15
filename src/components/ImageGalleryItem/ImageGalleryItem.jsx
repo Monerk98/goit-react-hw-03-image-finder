@@ -18,6 +18,6 @@ export default ImageGalleryItem;
 ImageGalleryItem.propTypes = {
   src: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  modalOpen: PropTypes.func.isRequired,
+  modalOpen: PropTypes.func,
   alt: PropTypes.string.isRequired,
 };
