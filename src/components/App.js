@@ -62,9 +62,6 @@ class App extends Component {
   }
 
   loadMore = () => {
-    // this.setState({
-    //   status: "pending",
-    // });
     this.setState((prevState) => ({
       page: prevState.page + 1,
       status: "pending",
