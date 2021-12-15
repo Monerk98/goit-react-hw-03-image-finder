@@ -17,47 +17,58 @@ class App extends Component {
     page: 1,
     error: null,
   };
-  componentDidUpdate(prevProps, prevState) {
-    const prevSearch = prevState.searchbar;
-    const nextSearch = this.state.searchbar;
 
-    if (prevSearch !== nextSearch) {
-      this.setState({ status: "pending", page: 1 });
-      this.fetchImageApi();
+  componentDidUpdate(_, prevState) {
+    const prevQuery = prevState.searchbar;
+    const nextQuery = this.state.searchbar;
+
+    const prevPage = prevState.page;
+    const nextPage = this.state.page;
+
+    if (nextPage > 1) {
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+
+    if (prevQuery !== nextQuery) {
+      this.setState({ result: [], status: "pending" });
+    }
+
+    if (prevQuery !== nextQuery || prevPage !== nextPage) {
+      imageApi
+        .fetchImg(nextQuery, nextPage)
+        .then(({ hits }) => {
+          const images = hits.map(
+            ({ id, webformatURL, largeImageURL, tags }) => {
+              return { id, webformatURL, largeImageURL, tags };
+            }
+          );
+          if (images.length > 0) {
+            this.setState((prevState) => {
+              return {
+                result: [...prevState.result, ...images],
+                status: "resolved",
+              };
+            });
+          } else {
+            alert(`No any picture`);
+            this.setState({ status: "idle" });
+          }
+        })
+        .catch((error) => this.setState({ error, status: "rejected" }));
     }
   }
 
-  fetchImageApi = () => {
-    const { searchbar, page } = this.state;
-    imageApi(searchbar, page)
-      .then((images) => {
-        if (images.total === 0) {
-          this.setState({ error: "No any picture", status: "rejected" });
-        } else {
-          this.setState((prevState) => ({
-            result: [...prevState.result, ...images.hits],
-            status: "resolved",
-            page: prevState.page + 1,
-            searchbar: searchbar,
-          }));
-          window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: "smooth",
-          });
-        }
-      })
-      .catch((error) => this.setState({ error, status: "rejected" }));
-  };
-
   loadMore = () => {
-    this.setState({
+    // this.setState({
+    //   status: "pending",
+    // });
+    this.setState((prevState) => ({
+      page: prevState.page + 1,
       status: "pending",
-    });
-    // this.setState((prevState) => ({
-    //   page: prevState.page + 1,
-    // }));
-
-    this.fetchImageApi();
+    }));
   };
 
   modalOpen = (moduleUrl, moduleAlt) => {
